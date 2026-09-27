@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rushikesh Godase</title>
+<meta name="description" content="Rushikesh Godase, backend software engineer. Java, Spring Boot, Kafka and distributed systems for FinTech and SaaS.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root {
+  color-scheme: light;
+  --bg: #F3F5F7;
+  --surface: #FFFFFF;
+  --sunk: #E9EDF1;
+  --ink: #12202B;
+  --muted: #55646F;
+  --line: #D5DCE2;
+  --accent: #1F4FD8;
+  --accent-soft: #E1E8FB;
+  --signal: #A8620A;
+  --ok: #17794A;
+  --bar-old: #B9C3CC;
+  --display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+  --body: "IBM Plex Sans", -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0B1117; --surface: #131C25; --sunk: #0F171E;
+    --ink: #E3E9EE; --muted: #94A3AF; --line: #263441;
+    --accent: #86A6FF; --accent-soft: #1B2944;
+    --signal: #E8A94B; --ok: #5CCB94; --bar-old: #3A4A58;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0B1117; --surface: #131C25; --sunk: #0F171E;
+  --ink: #E3E9EE; --muted: #94A3AF; --line: #263441;
+  --accent: #86A6FF; --accent-soft: #1B2944;
+  --signal: #E8A94B; --ok: #5CCB94; --bar-old: #3A4A58;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 400 17px/1.6 var(--body);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+h1, h2, h3, h4, p, ul, dl, dd { margin: 0; }
+ul { padding: 0; list-style: none; }
+h1, h2, h3 { text-wrap: balance; }
+button { font: inherit; color: inherit; }
+
+.wrap { max-width: 1080px; margin-inline: auto; padding-inline: clamp(16px, 5vw, 40px); }
+
+/* scroll progress */
+.progress { position: fixed; inset: 0 0 auto 0; height: 3px; z-index: 10; background: var(--accent); transform-origin: 0 50%; transform: scaleX(0); }
+
+/* top bar */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); }
+.top .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 24px; padding-block: 12px; }
+.mark { font: 500 14px var(--mono); color: var(--ink); text-decoration: none; }
+.mark span { color: var(--accent); }
+.nav { display: flex; flex-wrap: wrap; gap: 4px 20px; align-items: center; }
+.nav a { font: 500 14px var(--body); color: var(--muted); text-decoration: none; }
+.nav a:hover, .nav a.on { color: var(--ink); }
+.theme { font: 500 13px var(--mono); color: var(--muted); background: none; border: 1px solid var(--line); border-radius: 4px; padding: 4px 10px; cursor: pointer; }
+.theme { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; padding: 0; border-radius: 50%; }
+.theme .i-sun { display: none; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .theme .i-sun { display: block; } :root:not([data-theme="light"]) .theme .i-moon { display: none; } }
+:root[data-theme="dark"] .theme .i-sun { display: block; }
+:root[data-theme="dark"] .theme .i-moon { display: none; }
+.btn.iconbtn { display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 42px; padding: 0; }
+.btn.iconbtn svg { flex: none; }
+.iconbtn .i-ok { display: none; color: var(--ok); }
+.iconbtn.done .i-ok { display: block; }
+.iconbtn.done .i-copy { display: none; }
+.theme:hover { color: var(--ink); border-color: var(--muted); }
+
+@media (max-width: 860px) {
+  html { scroll-padding-top: 104px; }
+  .top .wrap { position: relative; display: block; padding-block: 0; }
+  .mark { display: block; padding-block: 16px 10px; }
+  .nav { flex-wrap: nowrap; overflow-x: auto; gap: 0 20px; padding-bottom: 10px; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { white-space: nowrap; flex: none; }
+  .nav .theme { position: absolute; top: 7px; right: clamp(16px, 5vw, 40px); }
+  .nav a.cv { position: absolute; top: 11px; right: calc(clamp(16px, 5vw, 40px) + 46px); }
+  .proof { top: 0; }
+}
+
+/* hero */
+.hero { padding-block: clamp(40px, 8vw, 88px) 32px; display: grid; gap: 22px; }
+.status { display: inline-flex; align-items: center; gap: 10px; font: 500 13px var(--mono); color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 0 var(--ok); animation: pulse 2.2s infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ok) 60%, transparent); } 70%, 100% { box-shadow: 0 0 0 10px transparent; } }
+h1 { font: 800 clamp(46px, 9.5vw, 104px)/0.95 var(--display); letter-spacing: -0.035em; }
+.tagline { font: 500 clamp(22px, 3.4vw, 34px)/1.2 var(--display); letter-spacing: -0.015em; color: var(--ink); }
+.tagline em { font-style: normal; color: var(--accent); }
+.typed { font: 500 clamp(18px, 2.6vw, 26px)/1.3 var(--mono); color: var(--accent); min-height: 1.3em; }
+.typed::after { content: "▍"; animation: blink 1s steps(1) infinite; margin-left: 2px; }
+@keyframes blink { 50% { opacity: 0; } }
+.lede { max-width: 62ch; font-size: clamp(18px, 2.1vw, 20px); line-height: 1.55; color: var(--muted); }
+.lede strong { color: var(--ink); font-weight: 600; }
+.links { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn { font: 500 15px var(--body); text-decoration: none; padding: 10px 18px; border-radius: 4px; border: 1px solid var(--line); color: var(--ink); background: var(--surface); cursor: pointer; transition: transform .15s, border-color .15s; }
+.btn:hover { border-color: var(--ink); transform: translateY(-2px); }
+.btn.dark { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.nav a.cv { color: var(--accent); border: 1px solid var(--accent); border-radius: 4px; padding: 3px 10px; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+
+/* live pipeline */
+.pipe { position: relative; margin-bottom: 8px; background: var(--sunk); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.pipe canvas { display: block; width: 100%; height: 200px; }
+.pipe-bar { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding: 14px 18px; border-top: 1px solid var(--line); background: var(--surface); }
+.pipe-bar p { font: 400 13px/1.5 var(--mono); color: var(--muted); }
+.pipe-bar b { font: 700 22px/1 var(--display); color: var(--ink); font-variant-numeric: tabular-nums; margin-right: 6px; }
+.pipe-tags { position: absolute; inset: 12px 18px auto 18px; display: flex; justify-content: space-between; font: 500 11px var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); pointer-events: none; }
+
+/* readout */
+.readout { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--line); margin-top: 8px; }
+.stat { padding: 26px 20px 26px 0; display: grid; gap: 6px; align-content: start; }
+.stat + .stat { padding-left: 20px; border-left: 1px solid var(--line); }
+.stat dt { font: 500 12px var(--mono); color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+.stat .num { font: 700 clamp(30px, 4vw, 46px)/1 var(--display); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.stat .num small { font: 500 14px var(--mono); color: var(--signal); letter-spacing: 0; margin-left: 4px; }
+.stat .note { font-size: 14px; line-height: 1.45; color: var(--muted); }
+@media (max-width: 820px) {
+  .readout { grid-template-columns: repeat(2, 1fr); }
+  .stat:nth-child(3) { padding-left: 0; border-left: 0; }
+  .stat:nth-child(n+3) { border-top: 1px solid var(--line); }
+}
+@media (max-width: 440px) {
+  .readout { grid-template-columns: 1fr; }
+  .stat + .stat { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); }
+}
+
+/* sections */
+section { padding-block: clamp(48px, 7vw, 84px); }
+section + section { border-top: 1px solid var(--line); }
+.head { display: grid; gap: 8px; margin-bottom: 36px; }
+.eyebrow { font: 500 13px var(--mono); color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; }
+h2 { font: 700 clamp(28px, 4vw, 42px)/1.1 var(--display); letter-spacing: -0.02em; }
+.head p:not(.eyebrow) { color: var(--muted); max-width: 60ch; }
+
+/* why */
+.why { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.why h3 { font: 700 21px/1.25 var(--display); margin-bottom: 8px; }
+.why p { color: var(--muted); font-size: 16px; }
+.why .k { font: 500 13px var(--mono); color: var(--signal); margin-bottom: 10px; }
+@media (max-width: 760px) { .why { grid-template-columns: 1fr; gap: 28px; } }
+
+/* case studies */
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.tab { font: 500 14px var(--body); padding: 8px 14px; border-radius: 4px; border: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; }
+.tab:hover { color: var(--ink); border-color: var(--muted); }
+.tab[aria-selected="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.case { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: clamp(20px, 3vw, 32px); display: grid; grid-template-columns: 1.3fr 1fr; gap: 32px; }
+.case h3 { font: 700 clamp(22px, 3vw, 28px)/1.2 var(--display); margin-bottom: 4px; }
+.case .at { font: 400 13px var(--mono); color: var(--muted); margin-bottom: 20px; }
+.case dl { display: grid; gap: 16px; }
+.case dt { font: 500 12px var(--mono); color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 2px; }
+.case dd { font-size: 16px; }
+.viz { display: grid; gap: 14px; align-content: center; }
+.viz h4 { font: 500 12px var(--mono); color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+.vrow { display: grid; gap: 4px; font: 400 13px var(--mono); color: var(--muted); }
+.vrow .t { display: flex; align-items: center; gap: 10px; }
+.vbar { height: 20px; border-radius: 2px; background: var(--bar-old); width: 0; transition: width .9s cubic-bezier(.2,.7,.2,1); flex: none; max-width: calc(100% - 96px); }
+.vbar.new { background: var(--accent); }
+.vrow b { color: var(--ink); font-weight: 500; white-space: nowrap; }
+.case .stackline { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 20px; }
+.chip-s { font: 400 12px var(--mono); padding: 3px 8px; border-radius: 3px; background: var(--accent-soft); color: var(--accent); }
+@media (max-width: 800px) { .case { grid-template-columns: 1fr; } }
+
+/* experience */
+.jobs { display: grid; }
+.job { display: grid; grid-template-columns: 190px 1fr; gap: 8px 32px; padding-block: 28px; border-top: 1px solid var(--line); }
+.job:first-child { border-top: 0; padding-top: 0; }
+.when { font: 400 14px/1.6 var(--mono); color: var(--muted); padding-top: 5px; font-variant-numeric: tabular-nums; }
+.when .now { display: inline-block; margin-top: 6px; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ok); border: 1px solid var(--ok); border-radius: 3px; padding: 1px 7px; }
+.job h3 { font: 700 24px/1.2 var(--display); letter-spacing: -0.01em; }
+.job .title { color: var(--muted); font-size: 16px; margin-top: 4px; }
+.job ul { display: grid; gap: 12px; margin-top: 18px; max-width: 68ch; }
+.job li { padding-left: 20px; position: relative; border-radius: 3px; transition: background .3s; }
+.job li::before { content: ""; position: absolute; left: 0; top: 0.72em; width: 8px; height: 1px; background: var(--accent); }
+.job li strong { font-weight: 600; }
+@media (max-width: 720px) { .job { grid-template-columns: 1fr; } .when { padding-top: 0; } }
+
+/* skills */
+.skillgrid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 32px; align-items: start; }
+.groups { display: grid; gap: 22px; }
+.group h3 { font: 500 12px var(--mono); color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 10px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font: 500 14px var(--body); padding: 6px 12px; border-radius: 4px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: transform .15s, border-color .15s; }
+.chip:hover { border-color: var(--accent); transform: translateY(-1px); }
+.chip i { font: 500 11px var(--mono); font-style: normal; color: var(--accent); background: var(--accent-soft); border-radius: 3px; padding: 0 5px; }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.chip[aria-pressed="true"] i { background: var(--bg); }
+.chip.plain { cursor: default; color: var(--muted); background: transparent; }
+.chip.plain:hover { transform: none; border-color: var(--line); }
+.proof { position: sticky; top: 76px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 24px; display: grid; gap: 16px; }
+.proof .lbl { font: 500 12px var(--mono); color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+.proof h3 { font: 700 28px/1.1 var(--display); }
+.proof ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; }
+.proof li { display: grid; gap: 2px; padding-left: 14px; border-left: 2px solid var(--accent); font-size: 15.5px; line-height: 1.5; }
+.proof li span { font: 400 12px var(--mono); color: var(--muted); }
+.legend { font-size: 14px; color: var(--muted); margin-top: 20px; }
+@media (max-width: 860px) { .skillgrid { grid-template-columns: 1fr; } .proof { position: static; } }
+
+/* domains carousel */
+.dhead { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 16px; margin-bottom: 28px; }
+.dhead .head { margin-bottom: 0; }
+.dctl { display: flex; align-items: center; gap: 10px; font: 500 13px var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.dctl button { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-size: 18px; line-height: 1; transition: border-color .15s, transform .15s; }
+.dctl button:hover:not(:disabled) { border-color: var(--ink); transform: scale(1.06); }
+.dctl button:disabled { opacity: .35; cursor: default; }
+.rail { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; padding-block: 6px 18px; scrollbar-width: none; cursor: grab; -webkit-overflow-scrolling: touch; }
+.rail::-webkit-scrollbar { display: none; }
+.rail.drag { cursor: grabbing; scroll-snap-type: none; scroll-behavior: auto; user-select: none; }
+.dcard { flex: 0 0 min(340px, 84%); scroll-snap-align: start; border-radius: 14px; padding: 26px; min-height: 330px; display: flex; flex-direction: column; gap: 12px; background: var(--surface); border: 1px solid var(--line); position: relative; overflow: hidden; transition: transform .25s, border-color .25s; }
+.dcard:hover { transform: translateY(-4px); border-color: var(--accent); }
+.dcard::before { content: ""; position: absolute; right: -60px; top: -60px; width: 190px; height: 190px; border-radius: 50%; background: var(--accent-soft); }
+.dcard > * { position: relative; }
+.dcard .co { font: 500 12px var(--mono); color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; }
+.dcard .big { font: 800 52px/1 var(--display); letter-spacing: -0.03em; margin-top: 18px; }
+.dcard .big small { display: block; font: 500 13px/1.4 var(--mono); color: var(--signal); letter-spacing: 0; margin-top: 6px; }
+.dcard h3 { font: 700 22px/1.2 var(--display); margin-top: auto; }
+.dcard p.d { font-size: 15px; line-height: 1.5; color: var(--muted); }
+.dcard .stackline { display: flex; flex-wrap: wrap; gap: 6px; }
+.dcard.lead { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.dcard.lead::before { background: var(--accent); opacity: .35; }
+.dcard.lead p.d { color: var(--bg); opacity: .75; }
+.dcard.lead .co, .dcard.lead .big small { color: var(--bg); opacity: .85; }
+.dots { display: flex; gap: 8px; justify-content: center; margin-top: 6px; }
+.dots button { width: 8px; height: 8px; padding: 0; border-radius: 4px; border: 0; background: var(--line); cursor: pointer; transition: width .25s, background .25s; }
+.dots button.on { width: 26px; background: var(--accent); }
+@media (prefers-reduced-motion: reduce) { .rail { scroll-behavior: auto; } .dcard, .dots button { transition: none; } }
+
+/* architecture */
+.archs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.arch { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 8px; transition: transform .2s, border-color .2s; }
+.arch:hover { transform: translateY(-3px); border-color: var(--accent); }
+.arch h3 { font: 700 18px/1.25 var(--display); }
+.arch p { font-size: 14.5px; line-height: 1.5; color: var(--muted); }
+.arch .co { font: 500 11px var(--mono); color: var(--accent); letter-spacing: 0.05em; text-transform: uppercase; margin-top: auto; padding-top: 8px; }
+@media (max-width: 900px) { .archs { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .archs { grid-template-columns: 1fr; } }
+
+/* ai flow */
+.flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.step { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; display: grid; gap: 8px; align-content: start; position: relative; transition: transform .2s, border-color .2s; }
+.step:hover { transform: translateY(-3px); border-color: var(--accent); }
+.step .n { font: 500 11px var(--mono); color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; }
+.step h3 { font: 700 19px/1.25 var(--display); }
+.step p:not(.n) { font-size: 14.5px; line-height: 1.5; color: var(--muted); }
+.step:not(:last-child)::after { content: "→"; position: absolute; right: -14px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 14px; z-index: 1; }
+.tools { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 24px; }
+.tools .lbl { font: 500 12px var(--mono); color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-right: 6px; }
+@media (max-width: 900px) { .flow { grid-template-columns: repeat(2, 1fr); } .step::after { display: none; } }
+@media (max-width: 480px) { .flow { grid-template-columns: 1fr; } }
+
+/* more work under a job */
+.more { margin-top: 22px; max-width: 68ch; }
+.more h4 { font: 500 12px var(--mono); color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+
+/* cards: writing and projects */
+.cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 24px; display: grid; gap: 10px; align-content: start; text-decoration: none; color: var(--ink); transition: transform .15s, border-color .15s; }
+a.card:hover { transform: translateY(-3px); border-color: var(--accent); }
+.card .meta { font: 400 12px var(--mono); color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; }
+.card h3 { font: 700 21px/1.25 var(--display); }
+.card p { font-size: 15.5px; line-height: 1.5; color: var(--muted); }
+.card .go { font: 500 14px var(--body); color: var(--accent); }
+.card .stackline { display: flex; flex-wrap: wrap; gap: 6px; }
+.after { margin-top: 20px; }
+.cards.three { grid-template-columns: repeat(3, 1fr); }
+.more-card .go { margin-top: auto; }
+@media (max-width: 900px) { .cards.three { grid-template-columns: 1fr; } }
+@media (max-width: 720px) { .cards { grid-template-columns: 1fr; } }
+li.hit, .card.hit { background: var(--accent-soft); box-shadow: 0 0 0 6px var(--accent-soft); border-radius: 3px; }
+.places { display: flex; flex-wrap: wrap; gap: 6px; }
+.proof .none { font-size: 15px; color: var(--muted); }
+
+/* two-up */
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.pair h2 { margin-bottom: 24px; }
+.ach { display: grid; gap: 18px; }
+.ach li { display: grid; grid-template-columns: 110px 1fr; gap: 16px; align-items: baseline; }
+.ach b { font: 700 28px/1 var(--display); color: var(--signal); font-variant-numeric: tabular-nums; }
+.edu h3 { font: 700 20px/1.3 var(--display); }
+.edu p { color: var(--muted); }
+.meter { height: 8px; border-radius: 4px; background: var(--sunk); border: 1px solid var(--line); margin-top: 14px; max-width: 320px; overflow: hidden; }
+.meter div { height: 100%; width: 95.6%; background: var(--signal); }
+.edu .cgpa { font: 500 15px var(--mono); color: var(--signal); margin-top: 8px; }
+@media (max-width: 720px) { .pair { grid-template-columns: 1fr; } }
+
+/* contact */
+.contact { display: grid; gap: 20px; }
+.contact h2 { font-size: clamp(32px, 6vw, 64px); max-width: 16ch; }
+.mailrow { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.mail { font: 500 clamp(16px, 2.6vw, 22px) var(--mono); overflow-wrap: anywhere; }
+footer { border-top: 1px solid var(--line); padding-block: 24px; font: 400 13px var(--mono); color: var(--muted); }
+
+/* reveal (only applied when JS adds .js-rv) */
+.js-rv .rv { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
+.js-rv .rv.in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .dot, .typed::after { animation: none; }
+  .vbar, .btn, .chip { transition: none; }
+}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="mark" href="#home">rushikesh<span>.</span>godase</a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#home">Home</a>
+      <a href="#domains">Industries</a>
+      <a href="#ai">AI</a>
+      <a href="#work">Case studies</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#writing">Writing</a>
+      <a href="#contact">Contact</a>
+      <a class="cv" href="https://drive.google.com/file/d/1N-ptoQSKK-T56mrnLVzkF52EC19Uxjnv/view?usp=sharing" target="_blank" rel="noopener">Resume</a>
+      <button class="theme" id="theme-toggle" type="button" aria-label="Switch between light and dark theme" title="Switch theme"><svg class="i-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg><svg class="i-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"></path></svg></button>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap">
+    <div class="hero" id="home">
+      <p class="status"><span class="dot"></span>Software Engineer II at MSCI · Pune, India</p>
+      <h1>Rushikesh Godase</h1>
+      <p class="tagline">Backend engineer for systems that have to <em>scale</em>.</p>
+      <p class="lede"><strong>4.5 years</strong> building <strong>Java and Spring Boot microservices</strong> and distributed systems across FinTech, analytics, real-time messaging, conversational AI, automotive retail and customer data platforms. I take systems from design to production on AWS and Kubernetes, and I work <strong>AI-natively</strong>: Claude Code, Cursor and agents are part of how I design, build and test every day.</p>
+      <div class="links">
+        <a class="btn primary" href="mailto:godserushikesh823@gmail.com">Email me</a>
+        <a class="btn dark" href="https://drive.google.com/file/d/1N-ptoQSKK-T56mrnLVzkF52EC19Uxjnv/view?usp=sharing" target="_blank" rel="noopener">View resume</a>
+        <a class="btn" href="#work">See the work</a>
+        <a class="btn" href="https://www.linkedin.com/in/rushikesh-godse/" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn" href="https://github.com/godse823" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn" href="https://leetcode.com/godse823/" target="_blank" rel="noopener">LeetCode</a>
+        <a class="btn" href="https://medium.com/@godserushikesh12" target="_blank" rel="noopener">Medium</a>
+      </div>
+    </div>
+
+    <div class="pipe" aria-label="Animated illustration of events flowing through partitioned Kafka topics">
+      <div class="pipe-tags"><span>producers</span><span>partitioned topics</span><span>consumers</span></div>
+      <canvas id="flow" height="200"></canvas>
+      <div class="pipe-bar">
+        <p><b id="live">0</b>events since you opened this page, at the 260M/day pace of the pipeline I worked on at Gupshup</p>
+      </div>
+    </div>
+
+    <section id="domains">
+      <div class="dhead rv">
+        <div class="head">
+          <p class="eyebrow">Industries</p>
+          <h2>Six industries, one backend skillset</h2>
+          <p>Swipe through the businesses I have built for.</p>
+        </div>
+        <div class="dctl">
+          <span id="dcount">1 / 6</span>
+          <button type="button" id="dprev" aria-label="Previous industry">←</button>
+          <button type="button" id="dnext" aria-label="Next industry">→</button>
+        </div>
+      </div>
+      <div class="rail" id="rail" tabindex="0" aria-label="Industries">
+        <article class="dcard">
+          <p class="co">MSCI</p>
+          <p class="big">−80%<small>P95 latency, 5s to under 1s</small></p>
+          <h3>FinTech and wealth analytics</h3>
+          <p class="d">Risk and portfolio analytics, financial securities search and usage reporting.</p>
+          <div class="stackline"><span class="chip-s">Java 17</span><span class="chip-s">Oracle</span><span class="chip-s">Solr</span></div>
+        </article>
+        <article class="dcard">
+          <p class="co">Gupshup</p>
+          <p class="big">260M<small>events processed per day</small></p>
+          <h3>Real-time messaging</h3>
+          <p class="d">Event generation and a 6,000 TPS messaging exit point with full observability.</p>
+          <div class="stackline"><span class="chip-s">Kafka</span><span class="chip-s">Java</span><span class="chip-s">AWS</span></div>
+        </article>
+        <article class="dcard">
+          <p class="co">Gupshup</p>
+          <p class="big">40M<small>records ingested per minute</small></p>
+          <h3>Conversational AI</h3>
+          <p class="d">Campaign Manager on a conversational cloud: clone, recurring and heartbeat campaigns.</p>
+          <div class="stackline"><span class="chip-s">Kafka</span><span class="chip-s">PostgreSQL</span><span class="chip-s">MongoDB</span></div>
+        </article>
+        <article class="dcard">
+          <p class="co">Gupshup</p>
+          <p class="big">+40%<small>read throughput</small></p>
+          <h3>Customer data platforms</h3>
+          <p class="d">Customer-profile microservices, secured APIs and fast reads for personalization.</p>
+          <div class="stackline"><span class="chip-s">Redis</span><span class="chip-s">MongoDB</span><span class="chip-s">Spring Security</span></div>
+        </article>
+        <article class="dcard">
+          <p class="co">Tekion</p>
+          <p class="big">F&I<small>finance and insurance</small></p>
+          <h3>Automotive retail</h3>
+          <p class="d">Dealership financing and insurance workflows on the Automotive Retail Cloud.</p>
+          <div class="stackline"><span class="chip-s">Java</span><span class="chip-s">Spring Boot</span></div>
+        </article>
+        <article class="dcard">
+          <p class="co">Gupshup</p>
+          <p class="big">99.99%<small>availability</small></p>
+          <h3>Enterprise B2B SaaS</h3>
+          <p class="d">Disaster recovery, production monitoring and an onboarding service for enterprise customers.</p>
+          <div class="stackline"><span class="chip-s">AWS RDS</span><span class="chip-s">PostgreSQL</span><span class="chip-s">Kubernetes</span></div>
+        </article>
+      </div>
+      <div class="dots" id="dots"></div>
+    </section>
+
+    <section id="architecture">
+      <div class="head rv">
+        <p class="eyebrow">Architecture</p>
+        <h2>The kinds of systems I design and run</h2>
+      </div>
+      <div class="archs">
+        <div class="arch rv"><h3>Distributed systems</h3><p>Services that scale out across nodes and keep working when one fails.</p><p class="co">Gupshup · MSCI</p></div>
+        <div class="arch rv"><h3>Event-driven</h3><p>Producers and consumers decoupled through partitioned Kafka topics, with failure detection and re-trigger.</p><p class="co">Gupshup</p></div>
+        <div class="arch rv"><h3>Multi-tenant</h3><p>One platform serving many customers, with isolated data and repeatable tenant onboarding.</p><p class="co">MSCI · Gupshup</p></div>
+        <div class="arch rv"><h3>Microservices</h3><p>Breaking a monolith into modular services that release independently.</p><p class="co">MSCI · Gupshup · Tekion</p></div>
+        <div class="arch rv"><h3>Data platforms</h3><p>Ingestion, storage, migration and archival of customer and analytics data across PostgreSQL, MongoDB and S3.</p><p class="co">Gupshup · MSCI</p></div>
+        <div class="arch rv"><h3>High availability</h3><p>Multi-AZ databases, disaster recovery and production monitoring.</p><p class="co">Gupshup</p></div>
+        <div class="arch rv"><h3>Caching and search</h3><p>Redis in front of databases for hot reads, Solr for search and autocomplete.</p><p class="co">Gupshup · MSCI</p></div>
+        <div class="arch rv"><h3>API gateway and security</h3><p>Routing through Spring Cloud Gateway, with JWT, RBAC and encryption.</p><p class="co">Gupshup</p></div>
+        <div class="arch rv"><h3>Batch and stream processing</h3><p>Streaming reads for large files, scheduled batch sync between stores.</p><p class="co">Gupshup · MSCI</p></div>
+      </div>
+    </section>
+
+    <section id="ai">
+      <div class="head rv">
+        <p class="eyebrow">AI-native engineering</p>
+        <h2>AI is part of how I build, at every step</h2>
+        <p>I have used AI coding tools daily at MSCI, Tekion and Gupshup. They speed me up; I stay accountable for what ships.</p>
+      </div>
+      <div class="flow">
+        <div class="step rv"><p class="n">Step 1</p><h3>Design</h3><p>Explore options, compare trade-offs and draft HLD and LLD with an AI assistant before writing code.</p></div>
+        <div class="step rv"><p class="n">Step 2</p><h3>Build and refactor</h3><p>Read unfamiliar code fast and refactor legacy modules with Claude Code and Cursor.</p></div>
+        <div class="step rv"><p class="n">Step 3</p><h3>Test</h3><p>Generate JUnit and Mockito tests, then extend them for the edge cases that matter.</p></div>
+        <div class="step rv"><p class="n">Step 4</p><h3>Verify</h3><p>Every AI-assisted change goes through code review and tests before it reaches production.</p></div>
+      </div>
+      <div class="tools rv">
+        <span class="lbl">Tools</span>
+        <span class="chip-s">Claude Code</span><span class="chip-s">Cursor</span><span class="chip-s">AI agents</span><span class="chip-s">MCP</span><span class="chip-s">Machine learning (Agrotech)</span>
+      </div>
+    </section>
+
+    <section id="work">
+      <div class="head rv">
+        <p class="eyebrow">Case studies</p>
+        <h2>What I changed, and by how much</h2>
+        <p>Pick a project to see the problem, the approach and the measured result.</p>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Case studies" id="tabs"></div>
+      <div class="case rv" id="case" role="tabpanel"></div>
+    </section>
+
+    <section id="experience">
+      <div class="head rv">
+        <p class="eyebrow">Experience</p>
+        <h2>Where I have worked</h2>
+        <p>Wealth analytics, automotive retail, conversational messaging and customer data platforms.</p>
+      </div>
+
+      <div class="jobs">
+        <article class="job rv">
+          <p class="when">Jul 2025 – Present<br><span class="now">Current</span></p>
+          <div>
+            <h3>MSCI</h3>
+            <p class="title">Software Engineer II · <a href="https://www.msci.com/data-and-analytics/wealth-management" target="_blank" rel="noopener">Wealth, Risk &amp; Portfolio Management Analytics</a></p>
+            <ul>
+              <li id="e1">Brought search database calls to <strong>near zero</strong> by building an Apache Solr autocomplete service for financial securities, with a CDC-free batch sync from Oracle.</li>
+              <li id="e2">Modernized a legacy multi-tenant JSP application into modular Spring Boot services on Java 17, releasing module by module with <strong>zero production disruption</strong>.</li>
+              <li id="e3">Lowered REST API <strong>P95 latency by 80%+</strong> (5s to under 1s) and sped up usage reports 60% by rewriting SQL subqueries as CTEs and tuning indexes and stored procedures.</li>
+              <li id="e4">Made tenant onboarding repeatable by provisioning a serverless tenant environment on GCP with Terraform.</li>
+              <li id="e5">Accelerated delivery across the SDLC with Claude Code and Cursor for design, refactoring and test generation, validating every change in code review and tests.</li>
+            </ul>
+            <div class="more">
+              <h4>Day to day</h4>
+              <ul>
+                <li id="e22">System design, HLD and LLD for new services, with Spring Data JPA and Hibernate on Oracle, an Angular front end, and Splunk and SonarQube in the delivery loop, in Agile sprints.</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="job rv">
+          <p class="when">Jun 2025 – Jul 2025</p>
+          <div>
+            <h3>Tekion Corp</h3>
+            <p class="title">Software Engineer II · Automotive Retail Cloud, Finance &amp; Insurance (F&amp;I)</p>
+            <ul>
+              <li id="e6">Worked on Java and Spring Boot backend services in the Finance &amp; Insurance domain, supporting dealership financing and insurance workflows on Tekion's Automotive Retail Cloud platform.</li>
+              <li id="e23">Used AI coding tools for code reading, refactoring and test generation while ramping up on a large codebase.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="job rv">
+          <p class="when">Jul 2024 – May 2025</p>
+          <div>
+            <h3>Gupshup Technologies</h3>
+            <p class="title">Software Engineer II · <a href="https://www.gupshup.io/converse/campaign-manager" target="_blank" rel="noopener">Campaign Manager</a></p>
+            <ul>
+              <li id="e7">Raised ingestion throughput <strong>4x to 40M records/min</strong> and trimmed CPU and memory use about 60% by replacing in-memory workbook parsing with streaming reads and multithreading over partitioned Kafka topics, with batch-level failure detection and re-trigger.</li>
+              <li id="e8">Achieved <strong>99.99%+ availability</strong> by designing PostgreSQL disaster recovery on Amazon RDS Multi-AZ.</li>
+              <li id="e9">Processed <strong>260M events/day</strong> by owning the Java event-generation stage and co-developing the 6,000 TPS real-time messaging exit point, with full production observability.</li>
+              <li id="e10">Reduced storage cost by automating archival of millions of MongoDB records to S3 Glacier.</li>
+            </ul>
+            <div class="more">
+              <h4>Also shipped</h4>
+              <ul>
+                <li id="e16">Campaign features used by enterprise customers: clone campaign, recurring campaigns and heartbeat monitoring.</li>
+                <li id="e17">Cross-team data migration, planned and executed with the owning teams.</li>
+                <li id="e18">Log ingestion on AWS EFS and EBS storage, feeding Coralogix and Zabbix monitoring.</li>
+                <li id="e24">Load and memory profiling with JMeter and JProfiler before production releases, with AI agents and MCP tools in the daily workflow.</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="job rv">
+          <p class="when">Jul 2022 – Jun 2024</p>
+          <div>
+            <h3>Gupshup Technologies</h3>
+            <p class="title">Software Engineer I · <a href="https://www.gupshup.io/conversation-cloud/personalize" target="_blank" rel="noopener">Personalize</a>, Customer Data Platform</p>
+            <ul>
+              <li id="e11">Lifted read throughput <strong>about 40%</strong> by developing customer-profile microservices on MongoDB and PostgreSQL with Redis serving frequent reads.</li>
+              <li id="e12">Hardened REST APIs with Spring Security, JWT authentication and RBAC, plus AES data encryption.</li>
+              <li id="e13">Automated deployments to Kubernetes on AWS EKS with Helm charts and GitLab CI/CD.</li>
+              <li id="e14">Reached <strong>90%+ code coverage</strong> by authoring 400+ JUnit and Mockito unit tests.</li>
+            </ul>
+            <div class="more">
+              <h4>Also shipped</h4>
+              <ul>
+                <li id="e19">API routing and cross-cutting concerns through Spring Cloud Gateway.</li>
+                <li id="e20">An onboarding service for bringing new customers onto the platform.</li>
+                <li id="e21">A custom AWS library shared across services, so teams use S3 and other AWS services one consistent way.</li>
+                <li id="e25">Services built with Docker and Maven, designed with OOP principles and design patterns, and delivered in Scrum sprints.</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="job rv">
+          <p class="when">Jan 2022 – Mar 2022</p>
+          <div>
+            <h3>Crest Data Systems</h3>
+            <p class="title">Software Engineer Intern</p>
+            <ul>
+              <li id="e15">Delivered 90%+ accuracy in phishing URL detection by building a Python service on the PhishTank API.</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="skills">
+      <div class="head rv">
+        <p class="eyebrow">Skillset</p>
+        <h2>Every skill, with the proof behind it</h2>
+        <p>Select a skill to see where I used it and what came out of it.</p>
+      </div>
+      <div class="skillgrid">
+        <div>
+          <div class="groups" id="groups"></div>
+        </div>
+        <aside class="proof" id="proof" aria-live="polite"></aside>
+      </div>
+    </section>
+
+    <section id="writing">
+      <div class="head rv">
+        <p class="eyebrow">Writing</p>
+        <h2>I write about the Java I use</h2>
+        <p>Deep dives on concurrency and design patterns, published on Medium.</p>
+      </div>
+      <div class="cards">
+        <a class="card rv" id="w1" data-proof="Article: The Horse Race Multithreading Problem in Java, covering CountDownLatch, CyclicBarrier, Phaser and CompletableFuture." href="https://medium.com/@godserushikesh12/the-horse-race-multithreading-problem-in-java-countdownlatch-cyclicbarrier-phaser-and-advanced-01896cfc3e00" target="_blank" rel="noopener">
+          <p class="meta">Dec 2025 · Concurrency</p>
+          <h3>The Horse Race Multithreading Problem in Java</h3>
+          <p>Barrier synchronization with CountDownLatch, CyclicBarrier and Phaser, then winner detection, timeouts and CompletableFuture orchestration.</p>
+          <span class="go">Read on Medium →</span>
+        </a>
+        <a class="card rv" id="w2" data-proof="Article: Java Singleton Showdown, on how reflection breaks a singleton and why an enum does not." href="https://medium.com/@godserushikesh12/java-singleton-showdown-reflection-vs-enums-unbreakable-fortress-9fd66a94d239" target="_blank" rel="noopener">
+          <p class="meta">Jun 2025 · Design patterns</p>
+          <h3>Java Singleton Showdown: Reflection vs Enum</h3>
+          <p>How reflection breaks a classic singleton, and why an enum holds up.</p>
+          <span class="go">Read on Medium →</span>
+        </a>
+      </div>
+      <p class="after rv"><a href="https://medium.com/@godserushikesh12" target="_blank" rel="noopener">All articles on Medium</a></p>
+    </section>
+
+    <section id="projects">
+      <div class="head rv">
+        <p class="eyebrow">Projects and publication</p>
+        <h2>Earlier work</h2>
+        <p>Built during my degree, before I moved into backend engineering full time.</p>
+      </div>
+      <div class="cards three">
+        <a class="card rv" id="p1" data-proof="Agrotech: a Python machine learning project with a published paper." href="https://drive.google.com/file/d/11H5X2hEsem4l_aT_EALGUl3HcuSpWS3t/view?usp=drivesdk" target="_blank" rel="noopener">
+          <p class="meta">2022 · Published paper</p>
+          <h3>Agrotech</h3>
+          <p>A web application that helps farmers decide what to grow. It recommends crops and fertilizers from soil data and detects plant disease from leaf images using machine learning.</p>
+          <div class="stackline"><span class="chip-s">Python</span><span class="chip-s">Machine learning</span><span class="chip-s">Random Forest</span></div>
+          <span class="go">Read the paper →</span>
+        </a>
+        <div class="card rv" id="p2">
+          <p class="meta">2022 · Project</p>
+          <h3>Message Scheduler</h3>
+          <p>A service that queues messages and delivers them at a scheduled time.</p>
+          <div class="stackline"><span class="chip-s">Java</span><span class="chip-s">Scheduling</span></div>
+        </div>
+        <a class="card more-card rv" href="https://github.com/godse823" target="_blank" rel="noopener">
+          <p class="meta">GitHub</p>
+          <h3>See more</h3>
+          <p>More projects and code are on my GitHub profile.</p>
+          <span class="go">Open GitHub →</span>
+        </a>
+      </div>
+    </section>
+
+    <section id="achievements">
+      <div class="pair">
+        <div class="rv">
+          <h2>Achievements</h2>
+          <ul class="ach">
+            <li id="a1"><b>#1204</b><span><a href="https://drive.google.com/file/d/1L_32oixx_Aq6xnVzyfMGNJDJxQpdM--q/view?usp=sharing" target="_blank" rel="noopener">Global rank</a> in TCS CodeVita Season 10.</span></li>
+            <li id="a2"><b>750+</b><span><a href="https://leetcode.com/godse823/" target="_blank" rel="noopener">LeetCode problems</a> solved.</span></li>
+            <li id="a3"><b>5★</b><span><a href="https://www.hackerrank.com/profile/godserushikesh81" target="_blank" rel="noopener">HackerRank rating</a> in Data Structures &amp; Algorithms.</span></li>
+          </ul>
+        </div>
+        <div class="edu rv">
+          <h2>Education</h2>
+          <h3>Savitribai Phule Pune University</h3>
+          <p>B.E. in Computer Science · Jul 2018 – Jul 2022</p>
+          <div class="meter" role="img" aria-label="CGPA 9.56 out of 10"><div></div></div>
+          <p class="cgpa">CGPA 9.56 / 10</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="contact">
+      <p class="eyebrow">Contact</p>
+      <h2>Building something that has to scale?</h2>
+      <div class="mailrow">
+        <a class="mail" href="mailto:godserushikesh823@gmail.com" id="mail">godserushikesh823@gmail.com</a>
+        <button class="btn iconbtn" id="copy" type="button" aria-label="Copy email address" title="Copy email"><svg class="i-copy" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h10"></path></svg><svg class="i-ok" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button>
+      </div>
+      <div class="links">
+        <a class="btn dark" href="https://drive.google.com/file/d/1N-ptoQSKK-T56mrnLVzkF52EC19Uxjnv/view?usp=sharing" target="_blank" rel="noopener">View resume</a>
+        <a class="btn" href="https://drive.google.com/uc?export=download&amp;id=1N-ptoQSKK-T56mrnLVzkF52EC19Uxjnv" target="_blank" rel="noopener">Download resume</a>
+      </div>
+      <div class="links">
+        <a class="btn" href="https://www.linkedin.com/in/rushikesh-godse/" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn" href="https://github.com/godse823" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn" href="https://leetcode.com/godse823/" target="_blank" rel="noopener">LeetCode</a>
+        <a class="btn" href="https://www.hackerrank.com/profile/godserushikesh81" target="_blank" rel="noopener">HackerRank</a>
+        <a class="btn" href="https://medium.com/@godserushikesh12" target="_blank" rel="noopener">Medium</a>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">Rushikesh Godase · Pune, Maharashtra, India</div>
+</footer>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function $(id) { return document.getElementById(id); }
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+
+  /* theme */
+  var saved = null;
+  try { saved = localStorage.getItem("theme"); } catch (e) {}
+  if (saved === "light" || saved === "dark") root.setAttribute("data-theme", saved);
+  var colors = {};
+  function readColors() {
+    var cs = getComputedStyle(root);
+    ["--accent", "--signal", "--line", "--muted"].forEach(function (k) { colors[k] = cs.getPropertyValue(k).trim(); });
+  }
+  readColors();
+  $("theme-toggle").addEventListener("click", function () {
+    var current = root.getAttribute("data-theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    var next = current === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem("theme", next); } catch (e) {}
+    readColors(); if (reduce) drawFlow(0);
+  });
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { readColors(); if (reduce) drawFlow(0); });
+
+  /* scroll progress */
+  var bar = $("progress");
+  function onScroll() {
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.transform = "scaleX(" + (h > 0 ? Math.min(1, window.scrollY / h) : 0) + ")";
+  }
+  window.addEventListener("scroll", onScroll, { passive: true }); onScroll();
+
+  /* live event counter: 260M/day */
+  var live = $("live"), t0 = Date.now(), perSec = 260e6 / 86400;
+  function tickLive() { live.textContent = Math.floor((Date.now() - t0) / 1000 * perSec).toLocaleString("en-US"); }
+  if (reduce) { setInterval(tickLive, 1000); } else { (function loop() { tickLive(); requestAnimationFrame(loop); })(); }
+
+  /* pipeline canvas */
+  var cv = $("flow"), ctx = cv.getContext("2d"), W = 0, H = 200, lanes = 6, parts = [];
+  function size() {
+    var dpr = window.devicePixelRatio || 1;
+    W = cv.clientWidth; cv.width = W * dpr; cv.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (reduce) drawFlow(0);
+  }
+  function laneY(i) { return 48 + i * ((H - 72) / (lanes - 1)); }
+  function spawn(x) {
+    return { x: x, lane: Math.floor(Math.random() * lanes), v: 60 + Math.random() * 140, len: 6 + Math.random() * 22, hot: Math.random() < 0.12 };
+  }
+  for (var i = 0; i < 90; i++) parts.push(spawn(Math.random() * 1400));
+  function drawFlow(dt) {
+    ctx.clearRect(0, 0, W, H);
+    ctx.lineWidth = 1; ctx.strokeStyle = colors["--line"];
+    for (var l = 0; l < lanes; l++) { ctx.beginPath(); ctx.moveTo(0, laneY(l) + 0.5); ctx.lineTo(W, laneY(l) + 0.5); ctx.stroke(); }
+    parts.forEach(function (p) {
+      p.x += p.v * dt;
+      if (p.x - p.len > W) { var n = spawn(-30); p.x = n.x; p.lane = n.lane; p.v = n.v; p.len = n.len; p.hot = n.hot; }
+      ctx.fillStyle = p.hot ? colors["--signal"] : colors["--accent"];
+      ctx.globalAlpha = 0.35 + 0.65 * (p.v / 200);
+      ctx.fillRect(p.x - p.len, laneY(p.lane) - 2, p.len, 4);
+    });
+    ctx.globalAlpha = 1;
+  }
+  size(); window.addEventListener("resize", size);
+  if (!reduce) {
+    var last = performance.now();
+    (function frame(now) {
+      var dt = Math.min(0.05, (now - last) / 1000); last = now;
+      drawFlow(dt); requestAnimationFrame(frame);
+    })(last);
+  }
+
+  /* case studies */
+  var cases = [
+    { tab: "4x Kafka ingestion", title: "Ingestion throughput raised 4x to 40M records/min", at: "Gupshup · Campaign Manager",
+      problem: "Workbooks were parsed fully in memory, which limited throughput and cost heavy CPU and memory.",
+      approach: "Replaced in-memory parsing with streaming reads and multithreading over partitioned Kafka topics, with batch-level failure detection and re-trigger.",
+      result: "4x throughput, about 60% less CPU and memory.",
+      stack: ["Java", "Kafka", "Multithreading"],
+      viz: { h: "Records per minute", rows: [["before", 25, "10M", false], ["after", 100, "40M", true]] } },
+    { tab: "P95 5s to under 1s", title: "REST API P95 latency cut by more than 80%", at: "MSCI · Wealth analytics",
+      problem: "REST APIs had a P95 of 5 seconds and usage reports were slow.",
+      approach: "Rewrote SQL subqueries as CTEs and tuned indexes and stored procedures.",
+      result: "P95 under 1 second, usage reports 60% faster.",
+      stack: ["SQL", "Oracle", "Spring Boot", "REST APIs"],
+      viz: { h: "P95 latency", rows: [["before", 100, "5 s", false], ["after", 20, "< 1 s", true]] } },
+    { tab: "Solr autocomplete", title: "Search database calls brought to near zero", at: "MSCI · Wealth analytics",
+      problem: "Every securities search was served by calls to the database.",
+      approach: "Built an Apache Solr autocomplete service for financial securities, kept fresh by a CDC-free batch sync from Oracle.",
+      result: "Search database calls near zero.",
+      stack: ["Solr", "Oracle", "Java"],
+      viz: { h: "Search calls reaching the database", rows: [["before", 100, "all", false], ["after", 2, "near zero", true]] } },
+    { tab: "Legacy modernization", title: "Multi-tenant JSP monolith moved to Spring Boot on Java 17", at: "MSCI · Wealth analytics",
+      problem: "A legacy multi-tenant JSP application needed to be modernized while staying live for every tenant.",
+      approach: "Split it into modular Spring Boot services and released module by module.",
+      result: "Zero production disruption during the migration.",
+      stack: ["Java 17", "Spring Boot", "Microservices"],
+      viz: { h: "Production disruption", rows: [["incidents", 1, "0", true]] } },
+    { tab: "99.99% availability", title: "PostgreSQL disaster recovery on RDS Multi-AZ", at: "Gupshup · Campaign Manager",
+      problem: "The messaging platform needed its database to survive failures without taking campaigns down.",
+      approach: "Designed PostgreSQL disaster recovery on Amazon RDS Multi-AZ.",
+      result: "99.99%+ availability.",
+      stack: ["PostgreSQL", "AWS RDS"],
+      viz: { h: "Availability", rows: [["uptime", 100, "99.99%", true]] } }
+  ];
+  var tabs = $("tabs"), panel = $("case");
+  function showCase(i) {
+    var c = cases[i];
+    Array.prototype.forEach.call(tabs.children, function (b, j) { b.setAttribute("aria-selected", j === i ? "true" : "false"); });
+    panel.textContent = "";
+    var left = el("div");
+    left.appendChild(el("h3", "", c.title));
+    left.appendChild(el("p", "at", c.at));
+    var dl = el("dl");
+    [["Problem", c.problem], ["Approach", c.approach], ["Result", c.result]].forEach(function (r) {
+      var d = el("div"); d.appendChild(el("dt", "", r[0])); d.appendChild(el("dd", "", r[1])); dl.appendChild(d);
+    });
+    left.appendChild(dl);
+    var st = el("div", "stackline"); c.stack.forEach(function (s) { st.appendChild(el("span", "chip-s", s)); }); left.appendChild(st);
+    var viz = el("div", "viz"); viz.appendChild(el("h4", "", c.viz.h));
+    var bars = [];
+    c.viz.rows.forEach(function (r) {
+      var row = el("div", "vrow"); row.appendChild(el("span", "", r[0]));
+      var t = el("div", "t"), b = el("div", "vbar" + (r[3] ? " new" : ""));
+      t.appendChild(b); t.appendChild(el("b", "", r[2])); row.appendChild(t); viz.appendChild(row);
+      bars.push([b, r[1]]);
+    });
+    panel.appendChild(left); panel.appendChild(viz);
+    function grow() { bars.forEach(function (x) { x[0].style.width = "calc((100% - 96px) * " + (x[1] / 100) + ")"; }); }
+    if (reduce) grow(); else requestAnimationFrame(function () { requestAnimationFrame(grow); });
+  }
+  cases.forEach(function (c, i) {
+    var b = el("button", "tab", c.tab); b.type = "button"; b.setAttribute("role", "tab");
+    b.addEventListener("click", function () { showCase(i); });
+    tabs.appendChild(b);
+  });
+  showCase(0);
+
+  /* skills with evidence; numbers reference experience bullet ids */
+  var where = { e1: "MSCI", e2: "MSCI", e3: "MSCI", e4: "MSCI", e5: "MSCI", e22: "MSCI", e6: "Tekion", e23: "Tekion", e7: "Gupshup", e8: "Gupshup", e9: "Gupshup", e10: "Gupshup", e16: "Gupshup", e17: "Gupshup", e18: "Gupshup", e24: "Gupshup", e11: "Gupshup", e12: "Gupshup", e13: "Gupshup", e14: "Gupshup", e19: "Gupshup", e20: "Gupshup", e21: "Gupshup", e25: "Gupshup", e15: "Crest Data Systems", a1: "Achievement", a2: "Achievement", a3: "Achievement", w1: "Writing", w2: "Writing", p1: "Project" };
+  var ALL = ["MSCI", "Tekion", "Gupshup"];
+  var groups = [
+    ["Engineering foundations", [
+      ["System design", ["e7", "e8", "e2"], ALL], ["HLD", ["e22", "e8"], ALL], ["LLD", ["e22", "e25"], ALL],
+      ["OOP", ["e25"], ALL], ["Design patterns", ["e25", "w2"], ALL],
+      ["Data structures & algorithms", ["a2", "a3", "a1"], ALL], ["Agile / Scrum", ["e22", "e25"], ALL]]],
+    ["Architecture", [
+      ["Distributed systems", ["e7", "e9"], ["Gupshup", "MSCI"]], ["Event-driven", ["e7", "e9"], ["Gupshup"]], ["Multi-tenant", ["e2", "e4"], ["MSCI", "Gupshup"]],
+      ["Data platforms", ["e11", "e17", "e10"], ["Gupshup", "MSCI"]], ["High availability", ["e8"], ["Gupshup"]], ["Caching", ["e11"], ["Gupshup"]], ["API gateway", ["e19"], ["Gupshup"]]]],
+    ["Languages & core Java", [
+      ["Java 8, 11, 17", ["e2", "e6", "e7", "e9"], ALL], ["Multithreading", ["e7", "w1"], ["Gupshup", "MSCI"]], ["Python", ["e15", "p1"], ["Crest Data Systems"]]]],
+    ["Frameworks", [
+      ["Spring Boot", ["e2", "e6"], ALL], ["Microservices", ["e2", "e11"], ALL], ["REST APIs", ["e3", "e12"], ALL],
+      ["Spring Cloud Gateway", ["e19"], ["Gupshup"]], ["Spring Security", ["e12"], ["Gupshup"]],
+      ["Spring Data JPA", ["e22"], ALL], ["Hibernate", ["e22"], ALL], ["Angular", ["e22"], ["MSCI"]]]],
+    ["Data & messaging", [
+      ["Kafka", ["e7", "e9"], ["Gupshup"]], ["PostgreSQL", ["e8", "e11"], ["Gupshup"]], ["SQL", ["e3"], ALL],
+      ["Oracle", ["e1", "e3"], ["MSCI"]], ["MongoDB", ["e10", "e11"], ["Gupshup", "Tekion"]], ["Redis", ["e11"], ["Gupshup"]],
+      ["Solr", ["e1"], ["MSCI"]], ["Data migration", ["e17"], ["Gupshup"]]]],
+    ["Cloud & DevOps", [
+      ["AWS (EC2, S3, RDS, EKS, EFS, EBS)", ["e8", "e10", "e13", "e18", "e21"], ["Gupshup"]], ["GCP", ["e4"], ["MSCI"]],
+      ["Kubernetes", ["e13"], ["Gupshup"]], ["Helm", ["e13"], ["Gupshup"]], ["GitLab CI/CD", ["e13"], ["Gupshup"]],
+      ["Terraform", ["e4"], ["MSCI"]], ["Docker", ["e25"], ALL], ["Maven", ["e25"], ALL], ["Git", [], ALL]]],
+    ["Testing & observability", [
+      ["JUnit", ["e14"], ALL], ["Mockito", ["e14"], ALL], ["JMeter", ["e24"], ["Gupshup"]], ["JProfiler", ["e24"], ["Gupshup"]],
+      ["SonarQube", ["e22"], ["MSCI", "Gupshup"]], ["Splunk", ["e22"], ["MSCI"]], ["Zabbix", ["e18"], ["Gupshup"]], ["Coralogix", ["e18"], ["Gupshup"]]]],
+    ["AI tooling", [
+      ["Claude Code", ["e5", "e23"], ALL], ["Cursor", ["e5", "e23"], ALL], ["AI agents", ["e24", "e5"], ALL], ["MCP", ["e24"], ALL]]]
+  ];
+  var gEl = $("groups"), proof = $("proof"), chipEls = [];
+  function showSkill(name, ids, places, chip) {
+    chipEls.forEach(function (c) { c.setAttribute("aria-pressed", c === chip ? "true" : "false"); });
+    Array.prototype.forEach.call(document.querySelectorAll(".hit"), function (n) { n.classList.remove("hit"); });
+    proof.textContent = "";
+    proof.appendChild(el("p", "lbl", "Used at"));
+    var pl = el("div", "places"); places.forEach(function (p) { pl.appendChild(el("span", "chip-s", p)); }); proof.appendChild(pl);
+    proof.appendChild(el("h3", "", name));
+    if (!ids.length) { proof.appendChild(el("p", "none", "Part of my everyday workflow on every team.")); return; }
+    var ol = el("ol");
+    ids.forEach(function (id) {
+      var src = $(id); src.classList.add("hit");
+      var li = el("li"); li.appendChild(el("span", "", where[id]));
+      li.appendChild(document.createTextNode(src.getAttribute("data-proof") || src.textContent.replace(/\s+/g, " ").trim())); ol.appendChild(li);
+    });
+    proof.appendChild(ol);
+    var a = el("a", "", "See it on the page"); a.href = "#" + ids[0]; proof.appendChild(a);
+  }
+  groups.forEach(function (g) {
+    var box = el("div", "group rv"); box.appendChild(el("h3", "", g[0]));
+    var chips = el("div", "chips");
+    g[1].forEach(function (s) {
+      var b = el("button", "chip", s[0]); b.type = "button"; b.setAttribute("aria-pressed", "false");
+      b.addEventListener("click", function () { showSkill(s[0], s[1], s[2], b); if (window.innerWidth <= 860) proof.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" }); });
+      chipEls.push(b); chips.appendChild(b);
+      if (s[0] === "Kafka") setTimeout(function () { showSkill(s[0], s[1], s[2], b); }, 0);
+    });
+    box.appendChild(chips); gEl.appendChild(box);
+  });
+
+  /* industries carousel */
+  (function () {
+    var rail = $("rail"), cards = rail.children, dots = $("dots"), cur = 0;
+    function go(i) { i = Math.max(0, Math.min(cards.length - 1, i)); rail.scrollTo({ left: cards[i].offsetLeft - rail.offsetLeft, behavior: reduce ? "auto" : "smooth" }); }
+    Array.prototype.forEach.call(cards, function (c, i) {
+      var d = el("button"); d.type = "button"; d.setAttribute("aria-label", "Go to industry " + (i + 1));
+      d.addEventListener("click", function () { go(i); }); dots.appendChild(d);
+    });
+    function sync() {
+      var atEnd = rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 4, best = 0, bd = 1e9;
+      Array.prototype.forEach.call(cards, function (c, i) { var d = Math.abs(c.offsetLeft - rail.offsetLeft - rail.scrollLeft); if (d < bd) { bd = d; best = i; } });
+      cur = atEnd ? cards.length - 1 : best;
+      Array.prototype.forEach.call(dots.children, function (d, i) { d.classList.toggle("on", i === cur); });
+      $("dcount").textContent = (cur + 1) + " / " + cards.length;
+      $("dprev").disabled = rail.scrollLeft < 4; $("dnext").disabled = atEnd;
+    }
+    rail.addEventListener("scroll", sync, { passive: true }); window.addEventListener("resize", sync); sync();
+    $("dprev").addEventListener("click", function () { go((rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 4 ? bestStart() : cur) - 1); });
+    $("dnext").addEventListener("click", function () { go(cur + 1); });
+    function bestStart() { var b = 0, bd = 1e9; Array.prototype.forEach.call(cards, function (c, i) { var d = Math.abs(c.offsetLeft - rail.offsetLeft - rail.scrollLeft); if (d < bd) { bd = d; b = i; } }); return b; }
+    rail.addEventListener("keydown", function (e) { if (e.key === "ArrowRight") { e.preventDefault(); go(bestStart() + 1); } if (e.key === "ArrowLeft") { e.preventDefault(); go(bestStart() - 1); } });
+    var down = false, sx = 0, sl = 0;
+    rail.addEventListener("pointerdown", function (e) { if (e.pointerType !== "mouse") return; down = true; sx = e.clientX; sl = rail.scrollLeft; });
+    window.addEventListener("pointermove", function (e) { if (!down) return; if (Math.abs(e.clientX - sx) > 4) rail.classList.add("drag"); rail.scrollLeft = sl - (e.clientX - sx); });
+    window.addEventListener("pointerup", function () { if (!down) return; down = false; if (rail.classList.contains("drag")) { rail.classList.remove("drag"); go(bestStart()); } });
+  })();
+
+  /* copy email */
+  $("copy").addEventListener("click", function () {
+    var btn = this, addr = $("mail").textContent;
+    function ok() { btn.classList.add("done"); btn.title = "Copied"; setTimeout(function () { btn.classList.remove("done"); btn.title = "Copy email"; }, 1800); }
+    function pick() { var r = document.createRange(); r.selectNodeContents($("mail")); var g = window.getSelection(); g.removeAllRanges(); g.addRange(r); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(addr).then(ok, pick); else pick();
+  });
+
+  /* reveal, counters, nav highlight */
+  if (!reduce && "IntersectionObserver" in window) {
+    root.classList.add("js-rv");
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+    }, { rootMargin: "0px 0px -8% 0px" });
+    Array.prototype.forEach.call(document.querySelectorAll(".rv"), function (n) { io.observe(n); });
+
+    Array.prototype.forEach.call(document.querySelectorAll("[data-count]"), function (n) {
+      var to = parseFloat(n.getAttribute("data-count")), dec = +n.getAttribute("data-dec") || 0, start = null;
+      n.textContent = (0).toFixed(dec);
+      requestAnimationFrame(function step(t) {
+        if (start === null) start = t;
+        var p = Math.min(1, (t - start) / 1400), e = 1 - Math.pow(1 - p, 3);
+        n.textContent = (to * e).toFixed(dec);
+        if (p < 1) requestAnimationFrame(step);
+      });
+    });
+  }
+  if ("IntersectionObserver" in window) {
+    var links = document.querySelectorAll(".nav a");
+    var so = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        Array.prototype.forEach.call(links, function (a) { a.classList.toggle("on", a.getAttribute("href") === "#" + e.target.id); });
+      });
+    }, { rootMargin: "-40% 0px -55% 0px" });
+    Array.prototype.forEach.call(document.querySelectorAll("section[id], #home"), function (s) { so.observe(s); });
+  }
+})();
+</script>
+</body>
+</html>
